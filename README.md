@@ -33,11 +33,18 @@ pixi global install pixi-pack
 pixi-pack -o env.tar
 ```
 
-### 3. Deploy to target machine
+### 3. Download pixi-unpack
+
+```bash
+# Auto-detects x86_64 or aarch64
+./download_pixi_unpack.sh
+```
+
+### 4. Deploy to target machine
 
 Copy these files to your target:
 - `env.tar` - The portable environment archive
-- `pixi-unpack` - Static binary to extract the environment ([download](https://github.com/Quantco/pixi-pack/releases))
+- `pixi-unpack` - Static binary to extract the environment
 - Your application files
 
 ```bash
@@ -50,11 +57,12 @@ Copy these files to your target:
 
 ```
 .
-├── pixi.toml          # Pixi project configuration
-├── pixi.lock          # Locked dependencies
-├── test_venv.py       # Test script
-├── env.tar            # Portable archive (generated)
-└── pixi-unpack        # Extractor binary (downloaded)
+├── pixi.toml              # Pixi project configuration
+├── pixi.lock              # Locked dependencies
+├── test_venv.py           # Test script
+├── download_pixi_unpack.sh # Downloads pixi-unpack for current arch
+├── env.tar                # Portable archive (generated)
+└── pixi-unpack            # Extractor binary (downloaded)
 ```
 
 ## How It Works
