@@ -24,18 +24,19 @@ jobs:
       - name: Test locally
         run: pixi run python test_venv.py
       
-      - name: Download pixi-pack and pixi-unpack (standalone binaries)
-        run: |
-          curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-pack-x86_64-unknown-linux-musl -o pixi-pack
-          curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-unpack-x86_64-unknown-linux-musl -o pixi-unpack
-          chmod +x pixi-pack pixi-unpack
-          ./pixi-pack --version
+      - name: Install pixi-pack
+        run: pixi global install pixi-pack
 
-      - name: Create self-extracting executable
+      - name: Create portable archive
         run: |
-          ./pixi-pack --create-executable --pixi-unpack-source ./pixi-unpack -o environment
-          ls -lh environment
-          file environment
+          export PATH="$HOME/.pixi/bin:$PATH"
+          pixi-pack -o env.tar
+          ls -lh env.tar
+
+      - name: Download pixi-unpack
+        run: |
+          curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-unpack-x86_64-unknown-linux-musl -o pixi-unpack
+          chmod +x pixi-unpack
 
       - name: Test in bare Debian container
         run: |
@@ -43,10 +44,12 @@ jobs:
             -v $GITHUB_WORKSPACE:/app \
             -w /app \
             debian:13 \
-            bash -c "./environment && ./env/bin/python test_venv.py"
+            bash -c "./pixi-unpack env.tar -o /app && ./env/bin/python test_venv.py"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: portable-env-executable
-          path: environment
+          name: portable-env
+          path: |
+            env.tar
+            pixi-unpack
