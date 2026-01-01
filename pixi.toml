@@ -1,0 +1,13 @@
+[workspace]
+authors = ["Ren Wang <iamwrm@gmail.com>"]
+channels = ["conda-forge"]
+name = "try_portable_uv"
+platforms = ["linux-aarch64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.12.*"
+requests = ">=2.32.5,<3"
+httpx = ">=0.28.1,<0.29"

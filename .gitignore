@@ -1,0 +1,17 @@
+# Pixi
+.pixi/
+pixi.lock
+
+# Generated artifacts
+env.tar
+env/
+pixi-unpack
+activate.sh
+env.sh
+environment.yml
+pixi-pack.json
+channel/
+
+# Python
+__pycache__/
+*.pyc

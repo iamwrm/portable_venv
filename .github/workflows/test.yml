@@ -1,0 +1,53 @@
+name: Test Portable Environment
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.40.3
+      
+      - name: Install dependencies
+        run: pixi install
+      
+      - name: Test locally
+        run: pixi run python test_venv.py
+      
+      - name: Install pixi-pack
+        run: pixi global install pixi-pack
+      
+      - name: Create portable archive
+        run: |
+          export PATH="$HOME/.pixi/bin:$PATH"
+          pixi-pack -o env.tar
+          ls -lh env.tar
+      
+      - name: Download pixi-unpack
+        run: |
+          curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-unpack-x86_64-unknown-linux-musl -o pixi-unpack
+          chmod +x pixi-unpack
+      
+      - name: Test in bare Debian container
+        run: |
+          docker run --rm \
+            -v $GITHUB_WORKSPACE:/app \
+            -w /app \
+            debian:13 \
+            bash -c "./pixi-unpack env.tar -o /app && ./env/bin/python test_venv.py"
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: portable-env
+          path: env.tar
