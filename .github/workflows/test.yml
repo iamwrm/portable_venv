@@ -34,9 +34,7 @@ jobs:
           ls -lh env.tar
 
       - name: Download pixi-unpack
-        run: |
-          curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-unpack-x86_64-unknown-linux-musl -o pixi-unpack
-          chmod +x pixi-unpack
+        run: ./download_pixi_unpack.sh
 
       - name: Test in bare Debian container
         run: |
