@@ -8,6 +8,8 @@ env/
 pixi-unpack
 activate.sh
 env.sh
+environment
+environment.sh
 environment.yml
 pixi-pack.json
 channel/
