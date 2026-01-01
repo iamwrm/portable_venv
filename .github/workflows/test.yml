@@ -24,15 +24,16 @@ jobs:
       - name: Test locally
         run: pixi run python test_venv.py
       
-      - name: Download pixi-pack (standalone binary)
+      - name: Download pixi-pack and pixi-unpack (standalone binaries)
         run: |
           curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-pack-x86_64-unknown-linux-musl -o pixi-pack
-          chmod +x pixi-pack
+          curl -fsSL https://github.com/Quantco/pixi-pack/releases/latest/download/pixi-unpack-x86_64-unknown-linux-musl -o pixi-unpack
+          chmod +x pixi-pack pixi-unpack
           ./pixi-pack --version
 
       - name: Create self-extracting executable
         run: |
-          ./pixi-pack --create-executable -o environment
+          ./pixi-pack --create-executable --pixi-unpack-source ./pixi-unpack -o environment
           ls -lh environment
           file environment
 
