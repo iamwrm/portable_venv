@@ -1,0 +1,9 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+# Build artifacts
+zstd_example
+env.tar
+env/
+pixi.lock

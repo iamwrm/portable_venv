@@ -1,0 +1,14 @@
+[workspace]
+authors = ["Ren Wang <iamwrm@gmail.com>"]
+channels = ["conda-forge"]
+name = "cpp_example"
+platforms = ["linux-aarch64", "linux-64"]
+version = "0.1.0"
+
+[tasks]
+build = "c++ -o zstd_example main.cpp -lzstd -I$CONDA_PREFIX/include -L$CONDA_PREFIX/lib -Wl,-rpath,$CONDA_PREFIX/lib"
+run = { cmd = "./zstd_example", depends-on = ["build"] }
+
+[dependencies]
+zstd = ">=1.5.7,<2"
+cxx-compiler = ">=1.11.0,<2"

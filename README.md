@@ -1,10 +1,17 @@
-# Portable Python Environment with Pixi
+# Portable Environments with Pixi
 
-Create a fully portable Python environment that can be deployed to a bare Linux system (no Python required).
+Create fully portable Python and C++ environments that can be deployed to a bare Linux system (no runtime dependencies required).
 
 ## Overview
 
-This project demonstrates how to use [Pixi](https://pixi.sh) and [pixi-pack](https://github.com/Quantco/pixi-pack) to create self-contained Python environments that can be copied to any compatible Linux machine.
+This project demonstrates how to use [Pixi](https://pixi.sh) and [pixi-pack](https://github.com/Quantco/pixi-pack) to create self-contained environments that can be copied to any compatible Linux machine.
+
+## Examples
+
+| Example | Description | Archive Size |
+|---------|-------------|--------------|
+| [Python](.) | Python 3.12 + requests + httpx | ~45 MB |
+| [C++](cpp_example/) | GCC compiler + zstd library | ~142 MB |
 
 ## Prerequisites
 
@@ -57,12 +64,14 @@ Copy these files to your target:
 
 ```
 .
-├── pixi.toml              # Pixi project configuration
-├── pixi.lock              # Locked dependencies
-├── test_venv.py           # Test script
+├── pixi.toml               # Python example config
+├── test_venv.py            # Python test script
+├── cpp_example/            # C++ example with zstd
+│   ├── pixi.toml
+│   ├── main.cpp
+│   └── README.md
 ├── download_pixi_unpack.sh # Downloads pixi-unpack for current arch
-├── env.tar                # Portable archive (generated)
-└── pixi-unpack            # Extractor binary (downloaded)
+└── .github/workflows/      # CI/CD tests
 ```
 
 ## How It Works
