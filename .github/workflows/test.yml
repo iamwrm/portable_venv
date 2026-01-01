@@ -64,8 +64,8 @@ jobs:
           pixi-version: v0.62.2
           manifest-path: cpp_example/pixi.toml
 
-      - name: Build and test locally
-        run: pixi run --manifest-path cpp_example/pixi.toml run
+      - name: Build and test locally (GCC + Clang)
+        run: pixi run --manifest-path cpp_example/pixi.toml test
 
       - name: Install pixi-pack
         run: pixi global install pixi-pack
@@ -79,7 +79,7 @@ jobs:
       - name: Download pixi-unpack
         run: ./download_pixi_unpack.sh
 
-      - name: Test in bare Debian container
+      - name: Test in bare Debian container (GCC + Clang)
         run: |
           docker run --rm \
             -v $GITHUB_WORKSPACE/cpp_example:/app \
@@ -88,8 +88,14 @@ jobs:
             debian:13 \
             bash -c '
               pixi-unpack env.tar -o /app
-              env/bin/c++ -o zstd_example main.cpp -I env/include -L env/lib -lzstd
-              LD_LIBRARY_PATH=env/lib ./zstd_example
+
+              echo "=== Testing GCC ==="
+              env/bin/c++ -o zstd_gcc main.cpp -I env/include -L env/lib -lzstd
+              LD_LIBRARY_PATH=env/lib ./zstd_gcc
+
+              echo "=== Testing Clang ==="
+              env/bin/clang++ -o zstd_clang main.cpp -I env/include -L env/lib -lzstd
+              LD_LIBRARY_PATH=env/lib ./zstd_clang
             '
 
       - name: Upload artifact

@@ -3,7 +3,7 @@
 !.pixi/config.toml
 
 # Build artifacts
-zstd_example
+zstd_example*
 env.tar
 env/
 pixi.lock

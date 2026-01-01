@@ -6,9 +6,13 @@ platforms = ["linux-aarch64", "linux-64"]
 version = "0.1.0"
 
 [tasks]
-build = "c++ -o zstd_example main.cpp -lzstd -I$CONDA_PREFIX/include -L$CONDA_PREFIX/lib -Wl,-rpath,$CONDA_PREFIX/lib"
-run = { cmd = "./zstd_example", depends-on = ["build"] }
+build-gcc = "c++ -o zstd_example_gcc main.cpp -lzstd -I$CONDA_PREFIX/include -L$CONDA_PREFIX/lib -Wl,-rpath,$CONDA_PREFIX/lib"
+build-clang = "clang++ -o zstd_example_clang main.cpp -lzstd -I$CONDA_PREFIX/include -L$CONDA_PREFIX/lib -Wl,-rpath,$CONDA_PREFIX/lib"
+run-gcc = { cmd = "./zstd_example_gcc", depends-on = ["build-gcc"] }
+run-clang = { cmd = "./zstd_example_clang", depends-on = ["build-clang"] }
+test = { depends-on = ["run-gcc", "run-clang"] }
 
 [dependencies]
 zstd = ">=1.5.7,<2"
 cxx-compiler = ">=1.11.0,<2"
+clangxx = ">=21.1.7,<22"
